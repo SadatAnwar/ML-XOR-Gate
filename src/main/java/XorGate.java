@@ -56,7 +56,7 @@ public class XorGate
     {
         int numInput = 2;
         int numOutputs = 2;
-        int nHidden = 2;
+        int nHidden = 4;
         return new MultiLayerNetwork(new NeuralNetConfiguration.Builder()
             .seed(123)
             .iterations(1000)
@@ -70,7 +70,7 @@ public class XorGate
                 .build())
             .layer(1, new OutputLayer.Builder(LossFunctions.LossFunction.NEGATIVELOGLIKELIHOOD)
                 .weightInit(WeightInit.XAVIER)
-                .activation("sigmoid")
+                .activation("softmax")
                 .nIn(nHidden).nOut(numOutputs).build())
             .pretrain(false)
             .backprop(true)
