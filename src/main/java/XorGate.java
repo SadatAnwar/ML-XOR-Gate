@@ -32,7 +32,7 @@ public class XorGate
         DataSet trainingData = getTrainingData();
         DataSetIterator iterator = new SamplingDataSetIterator(trainingData, trainingData.numExamples(), trainingData.numExamples());
 
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 10000; i++) {
             iterator.reset();
             nn.fit(iterator);
         }
@@ -42,11 +42,12 @@ public class XorGate
         INDArray testInputs = Nd4j.create(new double[] { 1, 1 });
         System.out.println(nn.output(testInputs).toString());
 
+        testInputs = Nd4j.create(new double[] { 0, 1 });
+        System.out.println(nn.output(testInputs).toString());
+
         testInputs = Nd4j.create(new double[] { 0, 0 });
         System.out.println(nn.output(testInputs).toString());
 
-        testInputs = Nd4j.create(new double[] { 0, 1 });
-        System.out.println(nn.output(testInputs).toString());
 
         testInputs = Nd4j.create(new double[] { 1, 0 });
         System.out.println(nn.output(testInputs).toString());
@@ -56,10 +57,10 @@ public class XorGate
     {
         int numInput = 2;
         int numOutputs = 2;
-        int nHidden = 4;
+        int nHidden = 2;
         return new MultiLayerNetwork(new NeuralNetConfiguration.Builder()
             .seed(123)
-            .iterations(1000)
+            .iterations(1)
             .optimizationAlgo(OptimizationAlgorithm.STOCHASTIC_GRADIENT_DESCENT)
             .learningRate(0.1)
             .weightInit(WeightInit.XAVIER)
