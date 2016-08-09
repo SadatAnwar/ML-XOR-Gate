@@ -9,7 +9,9 @@ import org.deeplearning4j.nn.weights.WeightInit;
 import org.deeplearning4j.optimize.listeners.ScoreIterationListener;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.dataset.DataSet;
+import org.nd4j.linalg.dataset.api.iterator.BaseDatasetIterator;
 import org.nd4j.linalg.dataset.api.iterator.DataSetIterator;
+import org.nd4j.linalg.dataset.api.iterator.TestDataSetIterator;
 import org.nd4j.linalg.factory.Nd4j;
 import org.nd4j.linalg.lossfunctions.LossFunctions;
 
@@ -30,9 +32,9 @@ public class XorGate
         nn.init();
         nn.setListeners(new ScoreIterationListener(100));
         DataSet trainingData = getTrainingData();
-        DataSetIterator iterator = new SamplingDataSetIterator(trainingData, trainingData.numExamples(), trainingData.numExamples());
+        DataSetIterator iterator = new TestDataSetIterator(trainingData);
 
-        for (int i = 0; i < 10000; i++) {
+        for (int i = 0; i < 5; i++) {
             iterator.reset();
             nn.fit(iterator);
         }
@@ -42,12 +44,11 @@ public class XorGate
         INDArray testInputs = Nd4j.create(new double[] { 1, 1 });
         System.out.println(nn.output(testInputs).toString());
 
-        testInputs = Nd4j.create(new double[] { 0, 1 });
-        System.out.println(nn.output(testInputs).toString());
-
         testInputs = Nd4j.create(new double[] { 0, 0 });
         System.out.println(nn.output(testInputs).toString());
 
+        testInputs = Nd4j.create(new double[] { 0, 1 });
+        System.out.println(nn.output(testInputs).toString());
 
         testInputs = Nd4j.create(new double[] { 1, 0 });
         System.out.println(nn.output(testInputs).toString());
@@ -60,7 +61,7 @@ public class XorGate
         int nHidden = 2;
         return new MultiLayerNetwork(new NeuralNetConfiguration.Builder()
             .seed(123)
-            .iterations(1)
+            .iterations(5000)
             .optimizationAlgo(OptimizationAlgorithm.STOCHASTIC_GRADIENT_DESCENT)
             .learningRate(0.1)
             .weightInit(WeightInit.XAVIER)
@@ -69,8 +70,7 @@ public class XorGate
             .layer(0, new DenseLayer.Builder().nIn(numInput).nOut(nHidden)
                 .activation("sigmoid")
                 .build())
-            .layer(1, new OutputLayer.Builder(LossFunctions.LossFunction.NEGATIVELOGLIKELIHOOD)
-                .weightInit(WeightInit.XAVIER)
+            .layer(1, new OutputLayer.Builder(LossFunctions.LossFunction.MSE)
                 .activation("softmax")
                 .nIn(nHidden).nOut(numOutputs).build())
             .pretrain(false)
