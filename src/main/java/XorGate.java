@@ -19,8 +19,12 @@ public class XorGate
 
     public static final int ROWS = 4;
 
-
     public static void main(String... args)
+    {
+        new XorGate();
+    }
+
+    public XorGate()
     {
         MultiLayerNetwork nn = getNeuralNetwork();
         nn.init();
@@ -48,7 +52,7 @@ public class XorGate
         System.out.println(nn.output(testInputs).toString());
     }
 
-    private static MultiLayerNetwork getNeuralNetwork()
+    private MultiLayerNetwork getNeuralNetwork()
     {
         int numInput = 2;
         int numOutputs = 2;
@@ -81,7 +85,7 @@ public class XorGate
      *
      * @return a training dataSet
      */
-    private static DataSet getTrainingData()
+    private DataSet getTrainingData()
     {
         INDArray input = Nd4j.zeros(4, 2);
         INDArray outPut = Nd4j.zeros(4, 2);
