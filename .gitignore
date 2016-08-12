@@ -10,10 +10,8 @@
 .idea/vcs.xml
 .idea/jsLibraryMappings.xml
 .idea/**
-.idea/vcs.xml
-
 *.iml
-
+*.log
 target/**
 
 # Sensitive or high-churn files:
